@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CustomerService } from '../../services/customer.service';
 import { RouterModule } from '@angular/router';
+import { Modal } from 'bootstrap';
 
 
 
@@ -16,6 +17,7 @@ import { RouterModule } from '@angular/router';
 export class DashboardComponent implements OnInit {
   customers: any[] = [];
   customerForm!: FormGroup;
+  private editModal!: Modal;
 
   constructor(private fb: FormBuilder, private customerService: CustomerService) { }
 
@@ -41,7 +43,10 @@ export class DashboardComponent implements OnInit {
 
   // funcion para crear Cliente
   saveCustomer() {
-    if (this.customerForm.invalid) return;
+    if (this.customerForm.invalid) {
+      this.markFormGroupTouched(this.customerForm);
+      return;
+    }
     const data = this.customerForm.value;
 
     this.customerService.createCustomer(data).subscribe({
@@ -59,11 +64,33 @@ export class DashboardComponent implements OnInit {
 
 
   editCustomer(c: any) {
-    this.customerForm.patchValue(c);
+    this.customerForm.reset();
+
+    // Mostrar modal primero
+    const modalElement = document.getElementById('editModal');
+    if (modalElement) {
+      this.editModal = new Modal(modalElement);
+      this.editModal.show();
+    }
+
+    // Llamar al servicio por ID
+    this.customerService.getCustomerById(c.id).subscribe({
+      next: (res) => {
+        this.customerForm.patchValue(res);
+      },
+      error: (err) => {
+        console.error('Error al obtener cliente:', err);
+        alert('Error al cargar los datos del cliente');
+      }
+    });
   }
 
   updateCustomer() {
-    if (this.customerForm.invalid) return;
+    if (this.customerForm.invalid) {
+      this.markFormGroupTouched(this.customerForm);
+      return;
+    }
+
     const data = this.customerForm.value;
 
     this.customerService.updateCustomer(data).subscribe({
@@ -71,6 +98,7 @@ export class DashboardComponent implements OnInit {
         alert('Cliente actualizado con éxito');
         this.loadCustomers();
         this.customerForm.reset();
+        this.closeModal();
       },
       error: err => {
         console.error(err);
@@ -91,6 +119,20 @@ export class DashboardComponent implements OnInit {
           alert('Error al eliminar cliente');
         }
       });
+    }
+  }
+
+  markFormGroupTouched(formGroup: FormGroup) {
+    Object.values(formGroup.controls).forEach(control => {
+      control.markAsTouched();
+    });
+  }
+
+  private closeModal() {
+    if (this.editModal) {
+      this.editModal.hide();
+      const backdrops = document.querySelectorAll('.modal-backdrop');
+      backdrops.forEach(b => b.remove());
     }
   }
 

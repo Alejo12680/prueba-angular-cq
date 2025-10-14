@@ -60,8 +60,7 @@
               </td>
               <td class="text-center">
                 <!-- Abre el modal con Bootstrap -->
-                <button class="btn btn-sm btn-outline-warning me-2" data-bs-toggle="modal" data-bs-target="#editModal"
-                  (click)="editCustomer(customer)">
+                <button class="btn btn-sm btn-outline-warning me-2" (click)="editCustomer(customer)">
                   <i class="bi bi-pencil-fill"></i>
                 </button>
 
@@ -84,52 +83,79 @@
           </tbody>
 
         </table>
+      </div>
+    </div>
+  </div>
+</div>
 
-        <!-- Modal de Editar -->
-        <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-          <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content bg-dark text-light">
-              <div class="modal-header border-0">
-                <h5 class="modal-title text-warning fw-bold" id="editModalLabel">
-                  <i class="bi bi-pencil-square me-2"></i> Editar Cliente
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                  aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                <form [formGroup]="customerForm" (ngSubmit)="updateCustomer()">
-                  <div class="row g-3">
-                    <div class="col-md-4">
-                      <label class="form-label fw-semibold">NIT / Tax ID</label>
-                      <input formControlName="tax_id" class="form-control" />
-                    </div>
-                    <div class="col-md-4">
-                      <label class="form-label fw-semibold">Nombre</label>
-                      <input formControlName="name" class="form-control" />
-                    </div>
-                    <div class="col-md-4">
-                      <label class="form-label fw-semibold">Email</label>
-                      <input formControlName="contact_email" class="form-control" />
-                    </div>
-                    <div class="col-md-12">
-                      <label class="form-label fw-semibold">Dirección</label>
-                      <input formControlName="address" class="form-control" />
-                    </div>
-                    <div class="col-md-12 mt-3 text-end">
-                      <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">
-                        Cancelar
-                      </button>
-                      <button type="submit" class="btn btn-warning fw-bold" data-bs-dismiss="modal">
-                        <i class="bi bi-check-circle"></i> Guardar Cambios
-                      </button>
-                    </div>
-                  </div>
-                </form>
+
+<!-- Modal de Editar -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content bg-dark text-light">
+      <div class="modal-header border-0">
+        <h5 class="modal-title text-warning fw-bold" id="editModalLabel">
+          <i class="bi bi-pencil-square me-2"></i> Editar Cliente
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="customerForm" (ngSubmit)="updateCustomer()">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">NIT / Tax ID</label>
+              <input formControlName="tax_id" class="form-control" />
+              <div *ngIf="customerForm.get('tax_id')?.invalid && customerForm.get('tax_id')?.touched"
+                class="text-danger small mt-1">
+                El NIT / Tax ID es obligatorio.
               </div>
             </div>
-          </div>
-        </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Nombre</label>
+              <input formControlName="name" class="form-control" />
+              <div *ngIf="customerForm.get('name')?.invalid && customerForm.get('name')?.touched"
+                class="text-danger small mt-1">
+                El Nombre es obligatorio.
+              </div>
+            </div>
+            <div class="col-md-12">
+              <label class="form-label fw-semibold">Email</label>
+              <input formControlName="contact_email" type="email" class="form-control" />
+              <div *ngIf="customerForm.get('contact_email')?.invalid && customerForm.get('contact_email')?.touched"
+                class="text-danger small mt-1">
+                El Email es obligatorio.
+              </div>
+            </div>
+            <div class="col-md-12">
+              <label class="form-label fw-semibold">Dirección</label>
+              <input formControlName="address" class="form-control" />
+              <div *ngIf="customerForm.get('address')?.invalid && customerForm.get('address')?.touched"
+                class="text-danger small mt-1">
+                El Dirección es obligatorio.
+              </div>
+            </div>
 
+            <!-- Estado Activo/Inactivo -->
+            <div class="col-md-12">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" formControlName="enabled" id="enabledSwitch">
+                <label class="form-check-label fw-semibold" for="enabledSwitch">
+                  Cliente Activo
+                </label>
+              </div>
+              <small class="text-muted">Cuando está desactivado, el cliente aparece como inactivo en el sistema.</small>
+            </div>
+
+            <div class="col-md-12 mt-3 text-end">
+              <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">
+                Cancelar
+              </button>
+              <button type="submit" class="btn btn-warning fw-bold">
+                <i class="bi bi-check-circle"></i> Guardar Cambios
+              </button>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
   </div>

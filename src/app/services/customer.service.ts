@@ -35,7 +35,7 @@ export class CustomerService {
   }
 
   updateCustomer(data: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/update/${data.id}/`, data, { headers: this.getHeaders() });
+    return this.http.post(`${this.apiUrl}/update/`, data, { headers: this.getHeaders() });
   }
 
   deleteCustomer(id: number): Observable<any> {
