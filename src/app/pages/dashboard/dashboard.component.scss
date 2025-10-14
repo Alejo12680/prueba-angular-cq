@@ -14,6 +14,15 @@
   overflow: hidden;
 }
 
+.modal.show {
+  display: block;
+  z-index: 1055 !important;
+}
+
+.modal-backdrop {
+  z-index: 1050 !important;
+}
+
 button.btn-outline-warning:hover {
   background-color: #ffc107;
   color: #000;

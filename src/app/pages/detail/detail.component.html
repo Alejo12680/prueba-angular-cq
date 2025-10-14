@@ -1,0 +1,46 @@
+<div class="login-page">
+  <div class="container py-5 mt-5">
+    <div *ngIf="loading" class="text-center">
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+    </div>
+
+    <div *ngIf="error && !loading" class="alert alert-danger">
+      {{ error }}
+    </div>
+
+    <div *ngIf="!loading && customer" class="card shadow-lg p-3 rounded-4">
+      <div class="d-flex align-items-center mb-3">
+        <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="rounded-circle me-3" alt="Perfil"
+          width="80" height="80">
+        <div>
+          <h3 class="mb-0">{{ customer.name }}</h3>
+          <small class="text-muted">{{ customer.contact_email }}</small>
+        </div>
+      </div>
+
+      <hr>
+
+      <div class="row">
+        <div class="col-md-6">
+          <p><strong>ID:</strong> {{ customer.id }}</p>
+          <p><strong>NIT:</strong> {{ customer.tax_id }}</p>
+        </div>
+        <div class="col-md-6">
+          <p><strong>Dirección:</strong> {{ customer.address }}</p>
+          <p>
+            <strong>Estado:</strong>
+            <span [ngClass]="customer.enabled ? 'text-success' : 'text-danger'">
+              {{ customer.enabled ? 'Activo' : 'Inactivo' }}
+            </span>
+          </p>
+        </div>
+      </div>
+
+      <div class="text-end mt-3">
+        <a routerLink="/dashboard" class="btn btn-secondary">Volver</a>
+      </div>
+    </div>
+  </div>
+</div>

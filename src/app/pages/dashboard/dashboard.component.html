@@ -9,60 +9,127 @@
       <!-- Formulario -->
       <form [formGroup]="customerForm" (ngSubmit)="saveCustomer()" class="mb-4">
         <div class="row g-3 align-items-end">
-          <div class="col-md-4">
-            <label class="form-label fw-semibold">Nombre</label>
-            <input formControlName="name" class="form-control" placeholder="Ej: Juan Pérez" />
-          </div>
-          <div class="col-md-4">
-            <label class="form-label fw-semibold">Email</label>
-            <input formControlName="email" type="email" class="form-control" placeholder="ejemplo@correo.com" />
+          <div class="col-md-2">
+            <label class="form-label fw-semibold">NIT / Tax ID</label>
+            <input formControlName="tax_id" class="form-control" placeholder="123456789" />
           </div>
           <div class="col-md-3">
-            <label class="form-label fw-semibold">Teléfono</label>
-            <input formControlName="phone" class="form-control" placeholder="3001234567" />
+            <label class="form-label fw-semibold">Nombre</label>
+            <input formControlName="name" class="form-control" placeholder="Ej: CQ Inversiones Pro" />
           </div>
-          <div class="col-md-1">
+          <div class="col-md-3">
+            <label class="form-label fw-semibold">Dirección</label>
+            <input formControlName="address" class="form-control" placeholder="La Gaitana" />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label fw-semibold">Email de contacto</label>
+            <input formControlName="contact_email" type="email" class="form-control" placeholder="info@correo.com" />
+          </div>
+          <div class="col-md-1 text-center">
             <button class="btn btn-warning fw-bold w-100" type="submit">
-              <i class="bi" [ngClass]="editing ? 'bi-check-lg' : 'bi-plus-lg'"></i>
+              <i class="bi bi-plus-lg"></i>
             </button>
           </div>
         </div>
       </form>
 
+
       <!-- Tabla -->
       <div class="table-responsive">
         <table class="table table-dark table-hover align-middle mb-0 rounded-3 overflow-hidden">
+
           <thead class="table-warning text-dark">
             <tr>
               <th>#</th>
               <th>Nombre</th>
               <th>Email</th>
-              <th>Teléfono</th>
+              <th>Activo</th>
               <th class="text-center">Acciones</th>
             </tr>
           </thead>
+
           <tbody>
-            <tr *ngFor="let c of customers">
-              <td>{{ c.id }}</td>
-              <td>{{ c.name }}</td>
-              <td>{{ c.email }}</td>
-              <td>{{ c.phone }}</td>
+            <tr *ngFor="let customer of customers; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ customer.name }}</td>
+              <td>{{ customer.contact_email }}</td>
+              <td>
+                <span [ngClass]="customer.enabled ? 'text-success' : 'text-danger'">
+                  {{ customer.enabled ? 'Sí' : 'No' }}
+                </span>
+              </td>
               <td class="text-center">
-                <button class="btn btn-sm btn-outline-warning me-2" (click)="editCustomer(c)">
+                <!-- Abre el modal con Bootstrap -->
+                <button class="btn btn-sm btn-outline-warning me-2" data-bs-toggle="modal" data-bs-target="#editModal"
+                  (click)="editCustomer(customer)">
                   <i class="bi bi-pencil-fill"></i>
                 </button>
-                <button class="btn btn-sm btn-outline-danger" (click)="deleteCustomer(c.id)">
+
+                <button class="btn btn-sm btn-outline-info me-2" [routerLink]="['/detail', customer.id]">
+                  <i class="bi bi-eye-fill"></i>
+                </button>
+
+
+                <button class="btn btn-sm btn-outline-danger" (click)="deleteCustomer(customer.id)">
                   <i class="bi bi-trash3-fill"></i>
                 </button>
               </td>
             </tr>
+
             <tr *ngIf="customers.length === 0">
               <td colspan="5" class="text-center text-secondary py-3">
                 No hay clientes registrados.
               </td>
             </tr>
           </tbody>
+
         </table>
+
+        <!-- Modal de Editar -->
+        <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content bg-dark text-light">
+              <div class="modal-header border-0">
+                <h5 class="modal-title text-warning fw-bold" id="editModalLabel">
+                  <i class="bi bi-pencil-square me-2"></i> Editar Cliente
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                  aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <form [formGroup]="customerForm" (ngSubmit)="updateCustomer()">
+                  <div class="row g-3">
+                    <div class="col-md-4">
+                      <label class="form-label fw-semibold">NIT / Tax ID</label>
+                      <input formControlName="tax_id" class="form-control" />
+                    </div>
+                    <div class="col-md-4">
+                      <label class="form-label fw-semibold">Nombre</label>
+                      <input formControlName="name" class="form-control" />
+                    </div>
+                    <div class="col-md-4">
+                      <label class="form-label fw-semibold">Email</label>
+                      <input formControlName="contact_email" class="form-control" />
+                    </div>
+                    <div class="col-md-12">
+                      <label class="form-label fw-semibold">Dirección</label>
+                      <input formControlName="address" class="form-control" />
+                    </div>
+                    <div class="col-md-12 mt-3 text-end">
+                      <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">
+                        Cancelar
+                      </button>
+                      <button type="submit" class="btn btn-warning fw-bold" data-bs-dismiss="modal">
+                        <i class="bi bi-check-circle"></i> Guardar Cambios
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>

@@ -3,18 +3,20 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Customer } from '../interfaces/customers';
+import { AuthService } from './auth.service';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class CustomerService {
-  private baseUrl = `${environment.url_api}/customer`;
+  private apiUrl = `${environment.url_api}/customer`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private authService: AuthService) { }
 
   // JWT del usuario logueado
-  private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem('token');
+  private getHeaders(): HttpHeaders {
+    const token = this.authService.getToken();
     return new HttpHeaders({
       'Content-Type': 'application/json',
       'Accept': 'application/json',
@@ -23,30 +25,30 @@ export class CustomerService {
     });
   }
 
-  // Listado de los clientes
-  getCustomers(): Observable<Customer[]> {
-    return this.http.post<Customer[]>(`${this.baseUrl}/list/`, {}, { headers: this.getAuthHeaders() });
+
+  getCustomers(): Observable<any[]> {
+    return this.http.post<any[]>(`${this.apiUrl}/list/`, {}, { headers: this.getHeaders() });
   }
 
-
-
-  /** 🔹 Obtener un cliente por ID (usa POST con body { id }) */
-  getCustomerById(id: number): Observable<any> {
-    return this.http.post(`${this.baseUrl}/get/`, { id }, { headers: this.getAuthHeaders() });
-  }
-
-  /** 🔹 Crear un cliente */
   createCustomer(data: Customer): Observable<any> {
-    return this.http.post(`${this.baseUrl}/create/`, data, { headers: this.getAuthHeaders() });
+    return this.http.post(`${this.apiUrl}/create/`, data, { headers: this.getHeaders() });
   }
 
-  /** 🔹 Actualizar un cliente */
-  updateCustomer(data: Customer): Observable<any> {
-    return this.http.post(`${this.baseUrl}/update/`, data, { headers: this.getAuthHeaders() });
+  updateCustomer(data: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/update/${data.id}/`, data, { headers: this.getHeaders() });
   }
 
-  /** 🔹 Eliminar un cliente (POST con id) */
   deleteCustomer(id: number): Observable<any> {
-    return this.http.post(`${this.baseUrl}/delete/`, { id }, { headers: this.getAuthHeaders() });
+    const url = `${this.apiUrl}/delete/`;
+    const body = { id };
+    return this.http.post(url, body, { headers: this.getHeaders() });
   }
+
+  getCustomerById(id: number): Observable<any> {
+    const url = `${this.apiUrl}/get/`;
+    const body = { id };
+    return this.http.post(url, body, { headers: this.getHeaders() });
+  }
+
+
 }

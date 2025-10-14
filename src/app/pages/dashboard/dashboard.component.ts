@@ -2,20 +2,20 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CustomerService } from '../../services/customer.service';
-import { NavbarComponent } from '../../components/navbar/navbar.component';
+import { RouterModule } from '@angular/router';
+
 
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, NavbarComponent],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.scss'
+  styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
   customers: any[] = [];
   customerForm!: FormGroup;
-  editing = false;
 
   constructor(private fb: FormBuilder, private customerService: CustomerService) { }
 
@@ -39,40 +39,60 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  // funcion para crear Cliente
   saveCustomer() {
     if (this.customerForm.invalid) return;
-
     const data = this.customerForm.value;
 
-    const request = this.editing
-      ? this.customerService.updateCustomer(data)
-      : this.customerService.createCustomer(data);
-
-    request.subscribe({
+    this.customerService.createCustomer(data).subscribe({
       next: () => {
+        alert('Cliente creado con éxito');
         this.loadCustomers();
-        this.cancelEdit();
+        this.customerForm.reset();
       },
-      error: err => console.error(err)
+      error: err => {
+        console.error(err);
+        alert('Error al crear cliente');
+      }
     });
   }
 
-  editCustomer(customer: any) {
-    this.editing = true;
-    this.customerForm.patchValue(customer);
+
+  editCustomer(c: any) {
+    this.customerForm.patchValue(c);
+  }
+
+  updateCustomer() {
+    if (this.customerForm.invalid) return;
+    const data = this.customerForm.value;
+
+    this.customerService.updateCustomer(data).subscribe({
+      next: () => {
+        alert('Cliente actualizado con éxito');
+        this.loadCustomers();
+        this.customerForm.reset();
+      },
+      error: err => {
+        console.error(err);
+        alert('Error al actualizar cliente');
+      }
+    });
   }
 
   deleteCustomer(id: number) {
     if (confirm('¿Seguro que deseas eliminar este cliente?')) {
       this.customerService.deleteCustomer(id).subscribe({
-        next: () => this.loadCustomers(),
-        error: err => console.error(err)
+        next: () => {
+          alert('Cliente eliminado con éxito');
+          this.loadCustomers();
+        },
+        error: err => {
+          console.error('Error al eliminar cliente:', err);
+          alert('Error al eliminar cliente');
+        }
       });
     }
   }
 
-  cancelEdit() {
-    this.editing = false;
-    this.customerForm.reset();
-  }
+
 }

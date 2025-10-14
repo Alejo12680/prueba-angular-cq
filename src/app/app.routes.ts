@@ -19,6 +19,13 @@ export const routes: Routes = [
   },
 
   {
+    path: 'detail/:id',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/detail/detail.component').then(m => m.DetailComponent)
+  },
+
+  {
     path: 'perfil',
     canActivate: [authGuard],
     loadComponent: () =>
