@@ -1,0 +1,41 @@
+<div class="register-page">
+  <!-- 🔹 Navbar (reutilizamos el mismo) -->
+  <app-navbar></app-navbar>
+
+  <!-- 🔹 Formulario de registro -->
+  <div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="card bg-dark bg-opacity-75 text-light p-4 shadow-lg" style="width: 420px;">
+      <h4 class="text-center mb-4">Create Account</h4>
+
+      <form>
+        <div class="mb-3">
+          <label class="form-label"><i class="bi bi-person-fill"></i> Username</label>
+          <input type="text" class="form-control" placeholder="Choose a username" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label"><i class="bi bi-envelope-fill"></i> Email</label>
+          <input type="email" class="form-control" placeholder="Enter your email" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label"><i class="bi bi-lock-fill"></i> Password</label>
+          <input type="password" class="form-control" placeholder="Create a password" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label"><i class="bi bi-lock-fill"></i> Confirm Password</label>
+          <input type="password" class="form-control" placeholder="Repeat your password" />
+        </div>
+
+        <button class="btn btn-warning w-100 fw-bold mt-3">Register</button>
+
+        <div class="text-center mt-3">
+          <small>Already have an account?
+            <a href="/login" class="text-warning text-decoration-none">Login</a>
+          </small>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

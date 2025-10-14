@@ -1,0 +1,23 @@
+.login-page {
+  background: url("https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1920&q=80") no-repeat center center fixed;
+  background-size: cover;
+  height: 100vh;
+}
+
+.card {
+  border-radius: 12px;
+}
+
+input.form-control {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+}
+
+input.form-control::placeholder {
+  color: #ccc;
+}
+
+.btn-warning {
+  border-radius: 8px;
+}
