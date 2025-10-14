@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 
+
+
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -15,8 +17,11 @@ import { NavbarComponent } from '../../components/navbar/navbar.component';
 
 
 export class LoginComponent {
+
+
   loginForm: FormGroup;
   errorMessage: string | null = null;
+  isLoading = false;
 
   constructor(
     private fb: FormBuilder,
@@ -24,23 +29,29 @@ export class LoginComponent {
     private router: Router
   ) {
     this.loginForm = this.fb.group({
-      username: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
     });
   }
 
   onSubmit() {
-    if (this.loginForm.valid) {
-      const { username, password } = this.loginForm.value;
-      this.authService.login(username, password).subscribe({
-        next: (response) => {
-          localStorage.setItem('token', response.token);
-          this.router.navigate(['/dashboard']);
-        },
-        error: () => {
-          this.errorMessage = 'Usuario o contraseña incorrectos';
-        },
-      });
-    }
+    if (this.loginForm.invalid) return;
+
+    this.isLoading = true;
+    this.errorMessage = null;
+
+    const { email, password } = this.loginForm.value;
+
+    this.authService.login(email, password).subscribe({
+      next: () => {
+        this.isLoading = false;
+        this.router.navigate(['/dashboard']);
+      },
+      error: (err) => {
+        console.error(err);
+        this.isLoading = false;
+        this.errorMessage = 'Credenciales incorrectas o usuario no válido.';
+      }
+    });
   }
 }

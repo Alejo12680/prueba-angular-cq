@@ -1,3 +1,4 @@
 export const environment = {
-  url_api: 'https://oauth.inspector.systems/v2/api'
+  production: false,
+  url_api: 'https://test.cqinversiones.co/api/'
 };
