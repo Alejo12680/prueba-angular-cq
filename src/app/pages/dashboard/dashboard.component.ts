@@ -17,12 +17,21 @@ import { Modal } from 'bootstrap';
 export class DashboardComponent implements OnInit {
   customers: any[] = [];
   customerForm!: FormGroup;
+  customerCreateForm!: FormGroup;
   private editModal!: Modal;
 
   constructor(private fb: FormBuilder, private customerService: CustomerService) { }
 
   ngOnInit(): void {
     this.loadCustomers();
+
+    this.customerCreateForm = this.fb.group({
+      tax_id: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(20)]],
+      name: ['', Validators.required],
+      address: ['', Validators.required],
+      contact_email: ['', [Validators.required, Validators.email]],
+      enabled: [true]
+    });
 
     this.customerForm = this.fb.group({
       id: [''],
@@ -43,17 +52,17 @@ export class DashboardComponent implements OnInit {
 
   // funcion para crear Cliente
   saveCustomer() {
-    if (this.customerForm.invalid) {
-      this.markFormGroupTouched(this.customerForm);
+    if (this.customerCreateForm.invalid) {
+      this.markFormGroupTouched(this.customerCreateForm);
       return;
     }
-    const data = this.customerForm.value;
+    const data = this.customerCreateForm.value;
 
     this.customerService.createCustomer(data).subscribe({
       next: () => {
         alert('Cliente creado con éxito');
         this.loadCustomers();
-        this.customerForm.reset();
+        this.customerCreateForm.reset({ enabled: true });
       },
       error: err => {
         console.error(err);
