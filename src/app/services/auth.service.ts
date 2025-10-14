@@ -23,8 +23,13 @@ export class AuthService {
   /* ---------------------------------- Login --------------------------------- */
   login(email: string, password: string): Observable<any> {
     const url = `${this.baseUrl}/auth/login/`;
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Accept-Language': 'es'
+    });
 
-    return this.http.post<{ token: string }>(url, { email, password }).pipe(
+    return this.http.post<{ token: string }>(url, { email, password }, { headers }).pipe(
       tap(res => {
         if (res?.token) {
           localStorage.setItem(this.tokenKey, res.token);
@@ -33,6 +38,7 @@ export class AuthService {
       })
     );
   }
+
 
   /* ------------------------------ Cerrar sesion ----------------------------- */
   logout(): Observable<any> {
@@ -70,8 +76,12 @@ export class AuthService {
   private getAuthHeaders(): HttpHeaders {
     const token = this.getToken();
     return new HttpHeaders({
-      Authorization: token ? `Bearer ${token}` : ''
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Accept-Language': 'es',
+      Authorization: token ? `JWT ${token}` : ''
     });
   }
+
 
 }

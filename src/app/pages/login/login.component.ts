@@ -12,7 +12,7 @@ import { NavbarComponent } from '../../components/navbar/navbar.component';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, NavbarComponent],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  styleUrls: ['./login.component.scss']
 })
 
 
