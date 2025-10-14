@@ -1,1 +1,34 @@
-<p>perfil works!</p>
+<div class="login-page">
+  <div class="container mt-5 pt-5 text-light">
+    <h2 class="text-dark mb-4">Perfil de Usuario</h2>
+
+    <!-- Estado de carga -->
+    <div *ngIf="isLoading" class="text-center my-5">
+      <div class="spinner-border text-warning"></div>
+      <p class="mt-2">Cargando información...</p>
+    </div>
+
+    <!-- Error -->
+    <div *ngIf="errorMessage && !isLoading" class="alert alert-danger">
+      {{ errorMessage }}
+    </div>
+
+    <!-- Datos del usuario -->
+    <div *ngIf="user && !isLoading" class="card bg-dark bg-opacity-75 text-light shadow-lg p-4">
+      <h4>{{ user.first_name }} {{ user.last_name }}</h4>
+      <p><strong>Último acceso:</strong> {{ user.last_login | date:'medium' }}</p>
+
+      <hr />
+
+      <h5>Configuración del perfil</h5>
+      <ul class="list-unstyled mt-2">
+        <li><strong>Zona horaria:</strong> {{ user.profile?.timezone }}</li>
+        <li><strong>Tema:</strong> {{ user.profile?.theme }}</li>
+        <li><strong>Idioma:</strong> {{ user.profile?.lang }}</li>
+        <li><strong>Mensajes timeout:</strong> {{ user.profile?.messages_timeout }} seg</li>
+        <li><strong>Inicio múltiple:</strong> {{ user.profile?.multiple_login ? 'Sí' : 'No' }}</li>
+        <li><strong>Contraseña segura:</strong> {{ user.profile?.secure_password ? 'Sí' : 'No' }}</li>
+      </ul>
+    </div>
+  </div>
+</div>

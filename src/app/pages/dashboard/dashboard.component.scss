@@ -1,13 +1,25 @@
-.container {
-  max-width: 1000px;
+.login-page {
+  background: url("https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1920&q=80") no-repeat center center fixed;
+  background-size: cover;
+  height: 100vh;
 }
 
 .card {
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .table {
-  border-radius: 12px;
+  border-radius: 0.5rem;
   overflow: hidden;
+}
+
+button.btn-outline-warning:hover {
+  background-color: #ffc107;
+  color: #000;
+}
+
+button.btn-outline-danger:hover {
+  background-color: #dc3545;
+  color: #fff;
 }

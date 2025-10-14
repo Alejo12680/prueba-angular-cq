@@ -1,0 +1,24 @@
+.login-page {
+  background: url("https://blogs.vmware.com/telco/wp-content/uploads/sites/67/2024/07/AdobeStock_93315950-scaled.jpeg") no-repeat center center fixed;
+  background-size: cover;
+  height: 100vh;
+}
+
+.container {
+  max-width: 700px;
+}
+
+.card {
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+h2,
+h4,
+h5 {
+  font-weight: 600;
+}
+
+strong {
+  color: orange;
+}

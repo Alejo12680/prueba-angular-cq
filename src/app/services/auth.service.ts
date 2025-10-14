@@ -17,7 +17,12 @@ export class AuthService {
   private _isAuthenticated$ = new BehaviorSubject<boolean>(this.hasToken());
   isAuthenticated$ = this._isAuthenticated$.asObservable();
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    const token = localStorage.getItem(this.tokenKey);
+    if (token) {
+      this._isAuthenticated$.next(true);
+    }
+  }
 
 
   /* ---------------------------------- Login --------------------------------- */
@@ -56,7 +61,7 @@ export class AuthService {
   getUserProfile(): Observable<any> {
     const url = `${this.baseUrl}/auth/user/profile/`;
     const headers = this.getAuthHeaders();
-    return this.http.get(url, { headers });
+    return this.http.post(url, {}, { headers });
   }
 
 
